@@ -7,10 +7,25 @@ grails:
         transactionManagement:
             proxies: false
     gorm:
+        # Whether to autowire entities.
+        # Disabled by default for performance reasons.
+        autowire: false
         reactor:
             # Whether to translate GORM events into Reactor events
             # Disabled by default for performance reasons
             events: false
+    controllers:
+        upload:
+            maxFileSize: 26214400 #25MB
+            maxRequestSize: 26214400 #25MB
+    databinding:
+        dateFormats:
+            - "dd/MM/yyyy"
+            - "dd/MM/yyyy HH:mm:ss"
+            - "yyyy-MM-dd HH:mm:ss.S"
+            - "yyyy-MM-dd'T'hh:mm:ss'Z'"
+            - "yyyy-MM-dd HH:mm:ss.S z"
+            - "yyyy-MM-dd'T'HH:mm:ssX"
 info:
     app:
         name: '@info.app.name@'
@@ -89,16 +104,15 @@ endpoints:
 hibernate:
     cache:
         queries: false
-        use_second_level_cache: true
+        use_second_level_cache: false
         use_query_cache: false
-        region.factory_class: net.sf.ehcache.hibernate.EhCacheRegionFactory
 dataSource:
     pooled: true
     jmxExport: true
     driverClassName: com.mysql.jdbc.Driver
     username: root
-    password: 'reis2000'
-
+    password: reis2000
+    dialect: org.hibernate.dialect.MySQL5InnoDBDialect
 environments:
     development:
         dataSource:
@@ -110,7 +124,7 @@ environments:
             url: jdbc:mysql://localhost:3306/concot
     production:
         dataSource:
-            dbCreate: none
+            dbCreate: update
             url: jdbc:mysql://localhost:3306/concot
             properties:
                 jmxEnabled: true
