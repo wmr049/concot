@@ -11,8 +11,4 @@ class FornecedorSpec extends Specification implements DomainUnitTest<Fornecedor>
     def cleanup() {
     }
 
-    void "test something"() {
-        expect:"fix me"
-            true == false
-    }
 }

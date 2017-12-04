@@ -1,9 +1,9 @@
 package concot
 
-import grails.testing.gorm.DomainUnitTest
+import grails.testing.services.ServiceUnitTest
 import spock.lang.Specification
 
-class CategoriaSpec extends Specification implements DomainUnitTest<Categoria> {
+class ICategoriaServiceSpec extends Specification implements ServiceUnitTest<ICategoriaService>{
 
     def setup() {
     }

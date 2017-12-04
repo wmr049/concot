@@ -11,8 +11,5 @@ class MoedaSpec extends Specification implements DomainUnitTest<Moeda> {
     def cleanup() {
     }
 
-    void "test something"() {
-        expect:"fix me"
-            true == false
-    }
+
 }

@@ -11,8 +11,5 @@ class CotacaoSpec extends Specification implements DomainUnitTest<Cotacao> {
     def cleanup() {
     }
 
-    void "test something"() {
-        expect:"fix me"
-            true == false
-    }
+
 }

@@ -1,6 +1,87 @@
 package concot
 
+import grails.validation.ValidationException
+import static org.springframework.http.HttpStatus.*
+
 class ItemController {
 
-    static scaffold = Item
+    ItemService itemService
+
+    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+
+    def index(Integer max) {
+        params.max = Math.min(max ?: 10, 100)
+        respond itemService.list(params), model:[itemCount: itemService.count()]
+    }
+
+    def show(Long id) {
+        respond itemService.get(id)
+    }
+
+    def create() {
+        respond new Item(params)
+    }
+
+    def save(Item item) {
+        def arquivo = request.getFile('imagem')
+        if (arquivo.empty) {
+// O arquivo é vazio. Isto é inválido
+// trata o erro
+        }
+// armazenamos o arquivo em um sistema de arquivos
+        arquivo.transferTo(new File('/arquivos/item/${item.id}'))
+    }
+
+    def edit(Long id) {
+        respond itemService.get(id)
+    }
+
+    def update(Item item) {
+        if (item == null) {
+            notFound()
+            return
+        }
+
+        try {
+            itemService.save(item)
+        } catch (ValidationException e) {
+            respond item.errors, view:'edit'
+            return
+        }
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'item.label', default: 'Item'), item.id])
+                redirect item
+            }
+            '*'{ respond item, [status: OK] }
+        }
+    }
+
+    def delete(Long id) {
+        if (id == null) {
+            notFound()
+            return
+        }
+
+        itemService.delete(id)
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'item.label', default: 'Item'), id])
+                redirect action:"index", method:"GET"
+            }
+            '*'{ render status: NO_CONTENT }
+        }
+    }
+
+    protected void notFound() {
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'item.label', default: 'Item'), params.id])
+                redirect action: "index", method: "GET"
+            }
+            '*'{ render status: NOT_FOUND }
+        }
+    }
 }

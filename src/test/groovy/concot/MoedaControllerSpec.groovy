@@ -11,8 +11,5 @@ class MoedaControllerSpec extends Specification implements ControllerUnitTest<Mo
     def cleanup() {
     }
 
-    void "test something"() {
-        expect:"fix me"
-            true == false
-    }
+
 }
